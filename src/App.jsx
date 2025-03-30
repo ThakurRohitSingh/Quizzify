@@ -1,6 +1,6 @@
 import { useState } from "react"
 import "./App.css"
-import OpeningPage from "./components/OpeningPage"
+import LandingPage from "./components/LandingPage"
 import Quiz from "./components/Quiz"
 
 
@@ -13,7 +13,7 @@ const App = () => {
   return (
    <>
    {
-    isQuizStarted ? <Quiz/> : <OpeningPage isQuizStarted={handleClick}/>
+    isQuizStarted ? <Quiz/> : <LandingPage isQuizStarted={handleClick}/>
    }
    </>
   )

@@ -14,11 +14,36 @@ const Question = (props) => {
           </button>
         );
       });
-    } else {}
+    } else {
+      answerButtonElements = props.options.map((option) => {
+        let myId;
+        if (
+          props.selectedAnswer === props.correctAnswer &&
+          option.choice === props.selectedAnswer
+        )
+          myId = "correct";
+        else if (
+          option.choice === props.selectedAnswer &&
+          props.selectedAnswer !== props.correctAnswer
+        )
+          myId = "incorrect";
+        else if (
+          option.choice === props.correctAnswer &&
+          props.selectedAnswser !== props.selectedAnswer
+        )
+          myId = "correct";
+  
+        return (
+          <button id={myId} key={option.id}>
+            {option.choice}
+          </button>
+        );
+      });
+    }
     return (
       <div className="question">
-        <h1 className="question-title">Whole Question is there</h1>
-        there i need to check for the option
+        <h1 className="question-title">{props.question}</h1>
+        {props.isChecked ? answerButtonElements : normalButtonElements}
         <hr className="question-divider" />
       </div>
     );

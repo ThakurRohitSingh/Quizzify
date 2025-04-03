@@ -42,20 +42,7 @@
     text-align: center;
     color: #f5f7fb;
   }
-  
-  .blob-top {
-    position: fixed;
-    top: 0;
-    right: 0;
-    z-index: -1;
-  }
-  
-  .blob-bottom {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    z-index: -1;
-  }
+
   
   .question {
     width: 600px;
@@ -193,7 +180,7 @@
     transform: scale(1.1);
     transition: all 0.3s ease-out;
   }
-  .openingpage-container > button:hover {
+  .LandingPage-container > button:hover {
     color: #293264;
     background-color: #fff;
     transform: scale(1.1);

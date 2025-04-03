@@ -5,7 +5,7 @@ const LandingPage = (props) => {
   return (
     <>
     <div className="LandingPage-container">
-        <h1>QUIZ WEBAPP</h1>
+        <h1>Quizzify</h1>
         <p>Test your knowledge</p>
         <button onClick={props.isQuizStarted}>Start Quiz</button>
         <img className="blob-top" src={blobTop} alt="" />

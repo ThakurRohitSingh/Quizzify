@@ -8,7 +8,8 @@
     position: relative;
 }
 
-.blob-top, .blob-bottom {
+.blob-top,
+.blob-bottom {
     position: absolute;
     width: 200px;
     height: auto;
@@ -131,4 +132,11 @@
 
 .auth-link span:hover {
     text-decoration: underline;
+}
+
+#error {
+    color: red;
+    font-size: 12px;
+    margin: 5px;
+    text-align: center;
 }

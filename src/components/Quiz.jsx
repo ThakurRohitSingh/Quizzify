@@ -5,7 +5,7 @@ import Question from "../components/Question";
 import blobTop from "../assets/blobTop.svg";
 import blobBottom from "../assets/blobBottom.svg";
 import Loader from "./Loader";
-
+import { useQuiz } from "./QuizContext";
 
 const Quiz = () => {
   const [questions, setQuestions] = useState([]);
@@ -14,90 +14,100 @@ const Quiz = () => {
   const [restartGame, setRestartGame] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  function stateSetter(data) {
-    //Returns proper object for questions state
-    const myQuestion = data.map((item) => {
-      return {
-        id: nanoid(),
-        question: decode(item.question),
-        correctAnswer: decode(item.correct_answer),
-        selectedAnswer: "",
-        options: choices(item.incorrect_answers, item.correct_answer),
-      };
-    });
-    setQuestions(myQuestion);
-  }
+  const {
+    selectedTopic,         
+    selectedQuestions,
+    selectedDifficulty
+  } = useQuiz();
 
-  function choices(incorrect_answers, correct_answer) {
-    //Returns shuffled array with id for options in state.
-    let arr = [correct_answer, ...incorrect_answers].sort(
-      () => Math.random() - 0.5
-    );
-    return arr.map((item) => {
-      return {
-        id: nanoid(),
-        choice: decode(item),
-      };
-    });
-  }
+  // Shuffle and decode options
+  const choices = (incorrect_answers, correct_answer) => {
+    const allOptions = [correct_answer, ...incorrect_answers].sort(() => Math.random() - 0.5);
+    return allOptions.map((item) => ({
+      id: nanoid(),
+      choice: decode(item),
+    }));
+  };
+
+  // Format API data
+  const formatQuestions = (data) => {
+    return data.map((item) => ({
+      id: nanoid(),
+      question: decode(item.question),
+      correctAnswer: decode(item.correct_answer),
+      selectedAnswer: "",
+      options: choices(item.incorrect_answers, item.correct_answer),
+    }));
+  };
 
   useEffect(() => {
-    setLoading(true);
-    fetch("link")   /// i need to add link there
-      .then((res) => res.json())
-      .then((data) => {
-        stateSetter(data.results);
-        setLoading(false);
-      });
-  }, [restartGame]);
+    if (selectedTopic && selectedQuestions && selectedDifficulty) {
+      setLoading(true);
+      const url = `https://opentdb.com/api.php?amount=${selectedQuestions}&category=${selectedTopic}&difficulty=${selectedDifficulty.toLowerCase()}&type=multiple`;
 
-  function handleButtonClick(choice, id) {
-    setQuestions((question) =>
-      question.map((item) => {
-        if (item.id === id) {
-          return { ...item, selectedAnswer: choice };
-        } else {
-          return item;
-        }
-      })
+      fetch(url)
+        .then((res) => res.json())
+        .then((data) => {
+          const formatted = formatQuestions(data.results);
+          setQuestions(formatted);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching quiz data:", error);
+          setLoading(false);
+        });
+    }
+  }, [restartGame, selectedTopic, selectedQuestions, selectedDifficulty]);
+
+  // Handle answer selection
+  const handleButtonClick = (choice, id) => {
+    setQuestions((prev) =>
+      prev.map((q) =>
+        q.id === id ? { ...q, selectedAnswer: choice } : q
+      )
     );
-  }
+  };
 
-  const questionElements = questions.map((question) => {
-    return (
-      <Question
-        key={question.id}
-        {...question}
-        handleButtonClick={handleButtonClick}
-        isChecked={isChecked}
-      />
-    );
-  });
+  // Check answers
+  const checkAnswers = () => {
+    let correctCount = 0;
+    let allAnswered = true;
 
-  function checkAnswers() {
-    // Calculating correct answers
-    // for loop breaks if user has not selected any value
-    let count = 0;
-    let checker = true;
-    for (let i = 0; i < questions.length; i++) {
-      if (questions[i].correctAnswer === questions[i].selectedAnswer) {
-        count++;
-      } else if (questions[i].selectedAnswer === "") {
-        checker = false;
-        count = 0;
+    for (let q of questions) {
+      if (!q.selectedAnswer) {
+        allAnswered = false;
         break;
       }
+      if (q.selectedAnswer === q.correctAnswer) {
+        correctCount++;
+      }
     }
-    //Setting Correct no. of answers and isChecked to true if all questions are checked
-    setCorrectAnswers(count);
-    setIsChecked(checker);
-  }
 
-  function handlePlayAgain() {
+    if (allAnswered) {
+      setCorrectAnswers(correctCount);
+      setIsChecked(true);
+    } else {
+      alert("Please answer all questions before checking!");
+    }
+  };
+
+  // Restart quiz
+  const handlePlayAgain = () => {
     setRestartGame((prev) => !prev);
     setCorrectAnswers(0);
     setIsChecked(false);
-  }
+  };
+
+  // Render questions
+  const questionElements = questions.map((q) => (
+    <Question
+      key={q.id}
+      {...q}
+      handleButtonClick={handleButtonClick}
+      isChecked={isChecked}
+    />
+  ));
+
   return loading ? (
     <Loader />
   ) : (
@@ -110,13 +120,16 @@ const Quiz = () => {
         >
           {isChecked ? "Play Again" : "Check Answers"}
         </button>
-        {isChecked && <h1 className="answer">You Scored {correctAnswers}/5</h1>}
+        {isChecked && (
+          <h1 className="answer">
+            You Scored {correctAnswers}/{questions.length}
+          </h1>
+        )}
       </div>
       <img className="blob-top" src={blobTop} alt="" />
       <img className="blob-bottom" src={blobBottom} alt="" />
     </div>
   );
+};
 
-}
-
-export default Quiz
+export default Quiz;

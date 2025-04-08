@@ -8,23 +8,6 @@
     position: relative;
 }
 
-.blob-top,
-.blob-bottom {
-    position: absolute;
-    width: 200px;
-    height: auto;
-}
-
-.blob-top {
-    top: 0;
-    left: 0;
-}
-
-.blob-bottom {
-    bottom: 0;
-    right: 0;
-}
-
 .container {
     display: flex;
     flex-direction: column;

@@ -1,15 +1,20 @@
-import blobTop from "../assets/blobTop.svg"
-import blobBottom from "../assets/blobBottom.svg"
+import "../App.css"
+import { useNavigate } from 'react-router-dom';
+
 
 const LandingPage = (props) => {
+
+  let navigate = useNavigate()
+
+  let LoginFunction = () =>{
+    navigate('/login')
+  }
   return (
     <>
     <div className="LandingPage-container">
         <h1>Quizzify</h1>
         <p>Test your knowledge</p>
-        <button onClick={props.isQuizStarted}>Start Quiz</button>
-        <img className="blob-top" src={blobTop} alt="" />
-        <img className="blob-bottom" src={blobBottom} alt="" />
+        <button onClick={()=>{LoginFunction()}}>Start Quiz</button>
     </div>
     </>
   )

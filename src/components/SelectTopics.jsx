@@ -69,8 +69,6 @@ const SelectTopics = () => {
 
       const base = [5, 10, 15, 20, 25, 30, 40, 50];
       const filtered = base.filter(q => q <= count);
-      if (count > 0 && !filtered.includes(count)) filtered.push(count);
-
       setNumberOfQuestionsOptions(filtered);
     }
 

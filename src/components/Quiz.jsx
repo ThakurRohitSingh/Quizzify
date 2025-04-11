@@ -2,16 +2,15 @@ import { useState, useEffect } from "react";
 import { nanoid } from "nanoid";
 import { decode } from "html-entities";
 import Question from "../components/Question";
-import blobTop from "../assets/blobTop.svg";
-import blobBottom from "../assets/blobBottom.svg";
 import Loader from "./Loader";
 import { useQuiz } from "./QuizContext";
+import { useNavigate } from "react-router-dom";
 
 const Quiz = () => {
   const [questions, setQuestions] = useState([]);
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [isChecked, setIsChecked] = useState(false);
-  const [restartGame, setRestartGame] = useState(false);
+  // const [restartGame, setRestartGame] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const {
@@ -19,6 +18,10 @@ const Quiz = () => {
     selectedQuestions,
     selectedDifficulty
   } = useQuiz();
+
+
+  //Navigate to the selectTopics component
+   const navigate = useNavigate()
 
   // Shuffle and decode options
   const choices = (incorrect_answers, correct_answer) => {
@@ -44,7 +47,7 @@ const Quiz = () => {
     if (selectedTopic && selectedQuestions && selectedDifficulty) {
       setLoading(true);
       const url = `https://opentdb.com/api.php?amount=${selectedQuestions}&category=${selectedTopic}&difficulty=${selectedDifficulty.toLowerCase()}&type=multiple`;
-
+      console.log(url)
       fetch(url)
         .then((res) => res.json())
         .then((data) => {
@@ -57,7 +60,7 @@ const Quiz = () => {
           setLoading(false);
         });
     }
-  }, [restartGame, selectedTopic, selectedQuestions, selectedDifficulty]);
+  }, [/* restartGame */, selectedTopic, selectedQuestions, selectedDifficulty]);
 
   // Handle answer selection
   const handleButtonClick = (choice, id) => {
@@ -96,6 +99,8 @@ const Quiz = () => {
     setRestartGame((prev) => !prev);
     setCorrectAnswers(0);
     setIsChecked(false);
+
+    navigate("/select")
   };
 
   // Render questions
@@ -126,8 +131,6 @@ const Quiz = () => {
           </h1>
         )}
       </div>
-      <img className="blob-top" src={blobTop} alt="" />
-      <img className="blob-bottom" src={blobBottom} alt="" />
     </div>
   );
 };

@@ -8,19 +8,6 @@ body {
   background-color: #f4f7fa;
 }
 
-.blob-top {
-  position: fixed;
-  top: 0;
-  right: 0;
-  z-index: -1;
-}
-
-.blob-bottom {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  z-index: -1;
-}
 
 
 

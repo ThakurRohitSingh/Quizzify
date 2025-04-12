@@ -10,7 +10,6 @@ const Quiz = () => {
   const [questions, setQuestions] = useState([]);
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [isChecked, setIsChecked] = useState(false);
-  // const [restartGame, setRestartGame] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const {
@@ -32,7 +31,7 @@ const Quiz = () => {
     }));
   };
 
-  // Format API data
+
   const formatQuestions = (data) => {
     return data.map((item) => ({
       id: nanoid(),
@@ -60,7 +59,7 @@ const Quiz = () => {
           setLoading(false);
         });
     }
-  }, [/* restartGame */, selectedTopic, selectedQuestions, selectedDifficulty]);
+  }, [selectedTopic, selectedQuestions, selectedDifficulty]);
 
   // Handle answer selection
   const handleButtonClick = (choice, id) => {

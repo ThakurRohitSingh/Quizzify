@@ -10,6 +10,7 @@ const Quiz = () => {
   const [questions, setQuestions] = useState([]);
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [isChecked, setIsChecked] = useState(false);
+  const [restartGame, setRestartGame] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const {
@@ -31,7 +32,7 @@ const Quiz = () => {
     }));
   };
 
-
+  // Format API data
   const formatQuestions = (data) => {
     return data.map((item) => ({
       id: nanoid(),
@@ -43,7 +44,10 @@ const Quiz = () => {
   };
 
   useEffect(() => {
-    if (selectedTopic && selectedQuestions && selectedDifficulty) {
+    if (!selectedTopic || !selectedQuestions || !selectedDifficulty) {
+      navigate("/select");
+      return;
+    }
       setLoading(true);
       const url = `https://opentdb.com/api.php?amount=${selectedQuestions}&category=${selectedTopic}&difficulty=${selectedDifficulty.toLowerCase()}&type=multiple`;
       console.log(url)
@@ -58,8 +62,7 @@ const Quiz = () => {
           console.error("Error fetching quiz data:", error);
           setLoading(false);
         });
-    }
-  }, [selectedTopic, selectedQuestions, selectedDifficulty]);
+   }, [restartGame, selectedTopic, selectedQuestions, selectedDifficulty]);
 
   // Handle answer selection
   const handleButtonClick = (choice, id) => {

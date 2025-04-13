@@ -117,9 +117,15 @@
     text-decoration: underline;
 }
 
-#error {
+#error-text {
     color: red;
     font-size: 12px;
     margin: 5px;
     text-align: center;
 }
+
+a{
+    color: #4d5b9e;
+    text-decoration: none;
+    font-weight: 500;
+  }

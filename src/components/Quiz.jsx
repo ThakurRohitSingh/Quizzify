@@ -14,14 +14,14 @@ const Quiz = () => {
   const [loading, setLoading] = useState(false);
 
   const {
-    selectedTopic,         
+    selectedTopic,
     selectedQuestions,
     selectedDifficulty
   } = useQuiz();
 
 
   //Navigate to the selectTopics component
-   const navigate = useNavigate()
+  const navigate = useNavigate()
 
   // Shuffle and decode options
   const choices = (incorrect_answers, correct_answer) => {
@@ -48,21 +48,21 @@ const Quiz = () => {
       navigate("/select");
       return;
     }
-      setLoading(true);
-      const url = `https://opentdb.com/api.php?amount=${selectedQuestions}&category=${selectedTopic}&difficulty=${selectedDifficulty.toLowerCase()}&type=multiple`;
-      console.log(url)
-      fetch(url)
-        .then((res) => res.json())
-        .then((data) => {
-          const formatted = formatQuestions(data.results);
-          setQuestions(formatted);
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.error("Error fetching quiz data:", error);
-          setLoading(false);
-        });
-   }, [restartGame, selectedTopic, selectedQuestions, selectedDifficulty]);
+    setLoading(true);
+    const url = `https://opentdb.com/api.php?amount=${selectedQuestions}&category=${selectedTopic}&difficulty=${selectedDifficulty.toLowerCase()}&type=multiple`;
+    console.log(url)
+    fetch(url)
+      .then((res) => res.json())
+      .then((data) => {
+        const formatted = formatQuestions(data.results);
+        setQuestions(formatted);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching quiz data:", error);
+        setLoading(false);
+      });
+  }, [restartGame, selectedTopic, selectedQuestions, selectedDifficulty]);
 
   // Handle answer selection
   const handleButtonClick = (choice, id) => {
@@ -76,23 +76,24 @@ const Quiz = () => {
   // Check answers
   const checkAnswers = () => {
     let correctCount = 0;
-    let allAnswered = true;
+    let answeredCount = 0;
 
-    for (let q of questions) {
-      if (!q.selectedAnswer) {
-        allAnswered = false;
-        break;
-      }
-      if (q.selectedAnswer === q.correctAnswer) {
-        correctCount++;
+    for (let question of questions) {
+      if (question.selectedAnswer) {
+        answeredCount++;
+        if (question.selectedAnswer === question.correctAnswer) {
+          correctCount++;
+        }
       }
     }
 
-    if (allAnswered) {
-      setCorrectAnswers(correctCount);
-      setIsChecked(true);
-    } else {
-      alert("Please answer all questions before checking!");
+    setCorrectAnswers(correctCount);
+    setIsChecked(true);
+
+    if (answeredCount < questions.length) {
+      alert(
+        `You skipped ${questions.length - answeredCount} question(s). Only answered ones were counted.`
+      );
     }
   };
 
@@ -129,7 +130,7 @@ const Quiz = () => {
         </button>
         {isChecked && (
           <h1 className="answer">
-            You Scored {correctAnswers}/{questions.length}
+            You Scored {correctAnswers}/{questions.filter(q => q.selectedAnswer).length}
           </h1>
         )}
       </div>

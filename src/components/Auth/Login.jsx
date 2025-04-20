@@ -4,28 +4,29 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
+import { useForm } from 'react-hook-form';
 
 const Login = () => {
-  const [loginData, setLoginData] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-
-  const changeForm = ({ target: { name, value } }) => {
-    setLoginData({ ...loginData, [name]: value });
-  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm();
 
   const togglePasswordVisibility = () => {
     setShowPassword((prevState) => !prevState);
   };
 
-  const login = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (data) => {
     try {
-      const user = await axios.post("http://localhost:5000/quiz/user/loginUser", loginData);
+      const user = await axios.post("http://localhost:5000/quiz/user/loginUser", data);
       toast.success(user.data.message);
       navigate("/select");
     } catch (err) {
       console.error(err);
+      toast.error("Invalid email or password");
     }
   };
 
@@ -34,16 +35,22 @@ const Login = () => {
       <div className="container">
         <h2>Login</h2>
         <p>Enter Credentials to Start Quizzing Now</p>
-        <form onSubmit={login}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div>
             <input
               type="email"
               name="email"
               className="input-field"
               placeholder="Email"
-              required
-              onChange={changeForm}
+              {...register("email", {
+                required: "Email is required",
+                pattern: {
+                  value: /^\S+@\S+$/i,
+                  message: "Invalid email format"
+                }
+              })}
             />
+            {errors.email && <p id="error-text">{errors.email.message}</p>}
           </div>
 
           <div className="password-wrapper">
@@ -52,15 +59,18 @@ const Login = () => {
               name="password"
               className="input-field"
               placeholder="Password"
-              required
-              onChange={changeForm}
+              {...register("password", {
+                required: "Password is required",
+                minLength: {
+                  value: 6,
+                  message: "Password must be at least 6 characters"
+                }
+              })}
             />
-            <span
-              className="toggle-password"
-              onClick={togglePasswordVisibility}
-            >
+            <span className="toggle-password" onClick={togglePasswordVisibility}>
               {showPassword ? "Hide" : "Show"}
             </span>
+            {errors.password && <p id="error-text">{errors.password.message}</p>}
           </div>
 
           <div className="forgot-password">

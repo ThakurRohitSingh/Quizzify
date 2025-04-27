@@ -8,7 +8,6 @@
 -  **User authentication** with login, signup, and password recovery.
 -  **Topic selection** to choose your area of interest.
 -  **Multiple-choice quiz interface** with a clean and intuitive design.
--  **Real-time feedback** on your selections *(coming soon)*.
 -  **Responsive UI** built with modern styling.
 
 ## Screenshots

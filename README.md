@@ -1,8 +1,8 @@
 
-# QuizUp 🎓
+# Quizzify 🎓
 
 ## Overview
-**QuizUp** is a modern quiz application designed for users to test their knowledge across various topics in a clean and engaging interface. Built with **React, Vite**, it offers a seamless user experience from login to quiz completion.
+**Quizzify** is a modern quiz application designed for users to test their knowledge across various topics in a clean and engaging interface. Built with **React, Vite**, it offers a seamless user experience from login to quiz completion.
 
 ## Features
 -  **User authentication** with login, signup, and password recovery.
@@ -42,11 +42,11 @@ Ensure you have **Node.js** and **npm** installed.
 ### Steps to Run
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/quizup.git
+   git clone https://github.com/yourusername/Quizzify.git
    ```
 2. Navigate to the project folder:
    ```bash
-   cd quizup
+   cd Quizzify
    ```
 3. Install dependencies:
    ```bash

@@ -1,15 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../Styles/Auth.css';
+import axios from 'axios';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const UpdatePassword = () => {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const id = searchParams.get('id');
+  const token = searchParams.get('token');
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // You can handle the form submission logic here (e.g., API call)
-    toast.success('Password updated successfully!');
+    if (password !== confirmPassword) {
+      return toast.error('Passwords do not match');
+    }
+
+    try {
+      const response = await axios.post(`http://localhost:5000/api/quiz/user/resetPassword?id=${id}&token=${token}`, {
+        password,
+      });
+
+      toast.success(response.data.message || 'Password updated successfully!');
+      setTimeout(() => navigate('/login'), 2000);
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to reset password');
+    }
   };
 
   return (
@@ -23,6 +45,9 @@ const UpdatePassword = () => {
               type="password"
               className="input-field"
               placeholder="New Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
             />
           </div>
 
@@ -31,6 +56,9 @@ const UpdatePassword = () => {
               type="password"
               className="input-field"
               placeholder="Confirm Password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
             />
           </div>
 
@@ -38,7 +66,6 @@ const UpdatePassword = () => {
         </form>
       </div>
 
-      {/* Toast Container */}
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
     </div>
   );

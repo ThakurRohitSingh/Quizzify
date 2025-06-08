@@ -1,10 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { nanoid } from "nanoid";
 import { decode } from "html-entities";
 import Question from "../components/Question";
 import Loader from "./Loader";
 import { useQuiz } from "./QuizContext";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
+import '../Styles/Quiz.css'
+import {AuthContext} from "./Auth/AuthProvider"
+
 
 const Quiz = () => {
   const [questions, setQuestions] = useState([]);
@@ -12,6 +15,7 @@ const Quiz = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [restartGame, setRestartGame] = useState(false);
   const [loading, setLoading] = useState(false);
+  let {logoutUser,islogin} = useContext(AuthContext)
 
   const {
     selectedTopic,
@@ -19,9 +23,8 @@ const Quiz = () => {
     selectedDifficulty
   } = useQuiz();
 
-
-  //Navigate to the selectTopics component
-  const navigate = useNavigate()
+  // Navigate to the selectTopics component
+  const navigate = useNavigate();
 
   // Shuffle and decode options
   const choices = (incorrect_answers, correct_answer) => {
@@ -50,7 +53,7 @@ const Quiz = () => {
     }
     setLoading(true);
     const url = `https://opentdb.com/api.php?amount=${selectedQuestions}&category=${selectedTopic}&difficulty=${selectedDifficulty.toLowerCase()}&type=multiple`;
-    console.log(url)
+    console.log(url);
     fetch(url)
       .then((res) => res.json())
       .then((data) => {
@@ -102,8 +105,7 @@ const Quiz = () => {
     setRestartGame((prev) => !prev);
     setCorrectAnswers(0);
     setIsChecked(false);
-
-    navigate("/select")
+    navigate("/select");
   };
 
   // Render questions
@@ -116,12 +118,22 @@ const Quiz = () => {
     />
   ));
 
+  const handleLogout = () => {
+    logoutUser();
+    navigate('/');
+  };
+
   return loading ? (
     <Loader />
+  // ) : !islogin ? (
+  //   <Navigate to="/login" />
   ) : (
     <div className="questions-container">
       {questionElements}
       <div className="answer-button-container">
+        <button className="logout-button" onClick={handleLogout}>
+          Logout
+        </button>
         <button
           className="check-answer"
           onClick={isChecked ? handlePlayAgain : checkAnswers}
@@ -136,6 +148,7 @@ const Quiz = () => {
       </div>
     </div>
   );
+  
 };
 
 export default Quiz;

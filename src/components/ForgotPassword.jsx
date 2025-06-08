@@ -1,14 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../Styles/Auth.css';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const ForgotPassword = () => {
-  const handleForgotPassword = (e) => {
+  const [email, setEmail] = useState('');
+
+  const handleForgotPassword = async (e) => {
     e.preventDefault();
-  
-    toast.success("Reset password link sent successfully!");
+
+    try {
+      const response = await axios.post("http://localhost:5000/api/quiz/user/requestPasswordReset", {
+        email,
+      });
+      console.log(email)
+
+      toast.success(response.data.message || "Reset password link sent successfully!");
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to send reset link");
+    }
   };
 
   return (
@@ -23,6 +35,8 @@ const ForgotPassword = () => {
               name="email"
               className="input-field"
               placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
@@ -33,7 +47,6 @@ const ForgotPassword = () => {
         </div>
       </div>
 
-      {/* Toast Container */}
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
     </div>
   );

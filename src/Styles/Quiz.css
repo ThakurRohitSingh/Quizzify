@@ -1,0 +1,20 @@
+  .logout-button {
+    font-family: "Inter";
+    line-height: 15px;
+    color: white;
+    border: 0.794239px solid red;
+    border-radius: 8px;
+    margin: 5px;
+    font-size: 1rem;
+    font-weight: 500;
+    background-color: red;
+    padding: 4px 8px 4px 8px;
+  }
+
+  .logout-button:hover {
+    color: red;
+    background-color: #fff;
+    transform: scale(1.1);
+    border: 1px solid red;
+    transition: all 0.3s ease-out;
+  }

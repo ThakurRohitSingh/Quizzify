@@ -9,6 +9,7 @@ import Login from './components/Auth/Login';
 import SignUp from './components/Auth/Sign';
 import AuthProvider from './components/Auth/AuthProvider';
 import ProtectedRoutes from './components/Auth/ProtectedRoutes';
+import UpdatePassword from './components/UpdatePassword';
 
 const App = () => {
   return (
@@ -21,7 +22,7 @@ const App = () => {
           <Route path="/login" element={<Login/>} />
           <Route path="/signup" element={<SignUp/>} />
           <Route path="/forgotpassword" element={<FogotPassword/>} />
-          {/* reset Password you need to add */}
+          <Route path="/reset-password" element={<UpdatePassword />} />
           <Route path="/select" element={<ProtectedRoutes>
             <SelectTopics />
           </ProtectedRoutes>} />

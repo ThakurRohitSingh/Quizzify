@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import '../../Styles/Auth.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
+import { AuthContext } from '../Auth/AuthProvider'; 
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const { loginUser } = useContext(AuthContext); 
+
   const {
     register,
     handleSubmit,
@@ -21,8 +24,11 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     try {
-      const user = await axios.post("http://localhost:5000/quiz/user/loginUser", data);
-      toast.success(user.data.message);
+      const response = await axios.post("http://localhost:5000/api/quiz/user/loginUser", data);
+      const token = response.data.token; 
+
+      loginUser(token); 
+      toast.success(response.data.message);
       navigate("/select");
     } catch (err) {
       console.error(err);

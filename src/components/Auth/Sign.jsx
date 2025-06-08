@@ -1,4 +1,4 @@
-import React from 'react';  
+import React from 'react';
 import "../../Styles/Auth.css";
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -14,9 +14,11 @@ const SignUp = () => {
     reset
   } = useForm();
 
+  const baseURL = import.meta.env.VITE_API_BASE_URL;
+
   const onSubmit = async (data) => {
     try {
-      await axios.post("http://localhost:5000/quiz/user/addUser", data);
+      await axios.post(`${baseURL}/addUser`, data);
       toast.success("User registered successfully!");
       reset();
     } catch (error) {

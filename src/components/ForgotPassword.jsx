@@ -8,11 +8,12 @@ import 'react-toastify/dist/ReactToastify.css';
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
 
+  const baseURL = import.meta.env.VITE_API_BASE_URL;
+
   const handleForgotPassword = async (e) => {
     e.preventDefault();
-
     try {
-      const response = await axios.post("http://localhost:5000/api/quiz/user/requestPasswordReset", {
+      const response = await axios.post(`${baseURL}/requestPasswordReset`, {
         email,
       });
       console.log(email)

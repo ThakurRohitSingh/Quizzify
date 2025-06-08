@@ -15,6 +15,8 @@ const UpdatePassword = () => {
   const id = searchParams.get('id');
   const token = searchParams.get('token');
 
+    const baseURL = import.meta.env.VITE_API_BASE_URL;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -23,7 +25,7 @@ const UpdatePassword = () => {
     }
 
     try {
-      const response = await axios.post(`http://localhost:5000/api/quiz/user/resetPassword?id=${id}&token=${token}`, {
+      const response = await axios.post(`${baseURL}/resetPassword?id=${id}&token=${token}`, {
         password,
       });
 

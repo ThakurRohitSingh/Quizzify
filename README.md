@@ -1,5 +1,4 @@
-
-# Quizzify 🎓
+# **[Quizzify](https://quizzifyf.netlify.app/)**
 
 ## Overview
 **Quizzify** is a modern quiz application designed for users to test their knowledge across various topics in a clean and engaging interface. Built with **React, Vite**, it offers a seamless user experience from login to quiz completion.

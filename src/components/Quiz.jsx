@@ -53,7 +53,6 @@ const Quiz = () => {
     }
     setLoading(true);
     const url = `https://opentdb.com/api.php?amount=${selectedQuestions}&category=${selectedTopic}&difficulty=${selectedDifficulty.toLowerCase()}&type=multiple`;
-    console.log(url);
     fetch(url)
       .then((res) => res.json())
       .then((data) => {
